@@ -476,17 +476,6 @@ figure{margin:0}
   font-size:.78rem;letter-spacing:.08em;color:var(--creme-3);
 }
 
-/* ---------- video no bloco corporativo ---------- */
-.corp__video{
-  margin:0 0 var(--sp6);padding-left:var(--sp5);
-  border-left:1px solid var(--linha);
-  font-size:.92rem;color:var(--creme-2)!important;max-width:52ch;
-}
-.corp__video span{
-  display:block;font-size:.66rem;font-weight:600;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--ouro);margin-bottom:4px;
-}
-
 /* ---------- O ESTUDIO ---------- */
 .estudio{display:grid;gap:var(--sp6)}
 .estudio__texto p{color:var(--creme-2);max-width:46ch}

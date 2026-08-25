@@ -140,153 +140,17 @@ para **`#C99A4B`**, um meio-termo. Não adotei o amarelo do logo puro de propós
 em texto pequeno sobre preto ele lê como "amarelo de aviso", não como premium —
 e brigaria com o âmbar quente das fotos, que ocupam quase toda a página.
 
-### ⚠️ Uma pergunta que o logo levantou
+### Vídeo: decisão tomada — fica de fora
 
-A assinatura do logo dele diz **"VÍDEOS E RETRATOS CORPORATIVOS"**.
+A assinatura do logo dele diz **"VÍDEOS E RETRATOS CORPORATIVOS"**, e o site não
+menciona vídeo em lugar nenhum. Isso foi levantado, o vídeo chegou a entrar numa
+versão, e o Maxwel decidiu **remover**. O site trata só das duas frentes do
+briefing: casamentos e retratos corporativos.
 
-**Vídeo não está em lugar nenhum do site** — nem no briefing, nem no material.
-Não inventei uma seção sem ter o que mostrar, mas isso deixa uma incoerência: o
-logo aparece no topo de todas as páginas anunciando um serviço que o site não
-menciona.
-
-Três saídas, e a escolha é dele:
-1. Ele manda material de vídeo e vira uma terceira frente;
-2. O site cita vídeo em uma linha na seção corporativa, sem galeria;
-3. Fica como está, e o logo no cabeçalho segue só como marca — que é o mais
-   provável, já que no tamanho do cabeçalho a linha da assinatura é ilegível
-   (uso só a câmera do logo ali, não o lettering).
-
-Vale perguntar ao Giovani, porque muda o posicionamento do negócio, não só o site.
-
-## A capa é uma cortina
-
-A capa não rola junto com a página: ela **trava na tela** e, conforme você rola,
-os dois lados do díptico **abrem para fora** e revelam o pôster da seção de
-casamentos atrás. Quando termina de abrir, a página segue para *Casamentos*.
-
-Como está feito:
-
-- A seção tem **230vh** de altura e o miolo (`.capa__fixo`) é `position: sticky`
-  com `100vh`. O que "prende" a capa é essa diferença — não há bloqueio de
-  rolagem, então o gesto do usuário continua sendo o normal do navegador.
-- O progresso da rolagem dentro da seção (0 → 1) move tudo: os lados saem com
-  `translate3d`, o pôster entra com `opacity` + `scale`, o título sai, e no fim
-  a ponte para o outro público aparece. **Só `transform` e `opacity`**, dentro de
-  um `requestAnimationFrame` — nada que force recálculo de layout a cada quadro.
-- A curva é um *smoothstep*, não linear: sem isso o movimento "bate" nas pontas.
-- Os dois lados têm **50,4%** de largura cada, então se sobrepõem 0,8% no centro
-  e a emenda não aparece. (A primeira versão tinha uma faixa preta cobrindo a
-  emenda; ela cortava o pôster ao meio depois que as cortinas abriam — removida.)
-
-**O que acontece sem JavaScript, ou com `prefers-reduced-motion: reduce`:** a
-classe `.capa--cortina` **nunca entra**, e a capa continua sendo o díptico
-estático de sempre — mesma altura, mesmas duas fotos, mesmos dois CTAs. O pôster
-e a ponte ficam `display: none`. Testado nos dois casos.
-
-### O que a cortina custou, e como paguei
-
-Quando as cortinas abrem, **os dois CTAs saem da tela junto com elas** — e esses
-CTAs são a arquitetura de dois públicos do site inteiro. Duas coisas seguram isso:
-
-1. O **menu do topo** ("Casamentos" / "Retratos") fica visível o tempo todo e é
-   fixo — os dois caminhos nunca somem de verdade.
-2. No fim da abertura entra uma linha sobre o pôster: **"Prefere retratos
-   corporativos? →"**. É o momento exato em que o site está prestes a levar todo
-   mundo para casamentos; ali o segundo público recebe uma saída própria.
-
-Não dupliquei os dois botões sobre o pôster de propósito: links repetidos
-confundem leitor de tela e diluem o sinal de SEO.
-
-**Um detalhe de ordem no HTML:** o título precisa vir **antes** das fotos no DOM.
-Na primeira versão eu o deixei depois (para ele ficar por cima no modo cortina) e,
-sem JavaScript, o `<h1>` da página aparecia embaixo das duas fotos. Agora ele vem
-primeiro e a sobreposição é resolvida por `z-index`, não pela ordem.
-
-## Vídeo entrou no site
-
-A incoerência do logo foi resolvida: o site agora **menciona vídeo**, sem
-inventar uma galeria que não existe.
-
-- Um bloco curto na seção corporativa: *"Também em vídeo — institucional,
-  depoimento e conteúdo de posicionamento para redes. Dá para combinar foto e
-  vídeo na mesma diária."*
-- Entrou no `hasOfferCatalog` do JSON-LD como serviço próprio, para o Google
-  entender que o estúdio faz vídeo.
-- A `meta description` e a descrição do negócio no JSON-LD passaram a citar vídeo.
-
-**Não criei seção nem galeria de vídeo** de propósito: sem material, seria uma
-promessa vazia. Quando ele mandar um reel ou institucional, o lugar natural é
-logo abaixo desse bloco, e aí vira uma frente com peso próprio.
-
-## Depoimentos
-
-Vieram cinco prints de avaliações do Google. **Quatro entraram no site:** Daniel
-Fialho, Thayná Braga, Sheron Deconto e Julien Moura.
-
-São exibidos como **imagem, não como texto transcrito**. Transcrever viraria
-texto que qualquer um poderia ter escrito; o print carrega a interface do Google,
-a foto da pessoa, o número de avaliações e a data — é isso que faz dele prova.
-Cada um recebeu `alt` com o conteúdo por extenso, então leitor de tela e Google
-leem tudo.
-
-Os prints são claros e o site é escuro. Em vez de inverter — o que distorceria a
-interface do Google e destruiria justamente a credibilidade — cada um ganhou uma
-**moldura branca assumida**, como uma foto revelada presa numa parede escura.
-
-### ⚠️ A quinta avaliação ficou de fora, e o motivo importa
-
-A avaliação de **Stefany Oliveira Venancio** diz:
-
-> *"**A Lu é incrível.** Tive a oportunidade de fazer as fotos de natal e dias
-> das mães com ela e amei…"*
-
-Ela elogia **a Lu**, não o Giovani. O site inteiro é construído em torno dele
-como fotógrafo — colocar ali um depoimento que agradece outra pessoa confunde
-quem lê e, na prática, credita o trabalho a alguém que o site não apresenta.
-
-A avaliação da Sheron ("**a equipe** Misturini") confirma que existe equipe, e a
-Lu pode muito bem fazer parte dela. Se fizer, há duas saídas honestas: o site
-apresenta a equipe, e aí o depoimento faz sentido; ou ele fica de fora. **Vale
-perguntar ao Giovani quem é a Lu** — o print está no zip, pronto para entrar.
-
-## Efeitos da galeria de casamentos
-
-Dois efeitos diferentes, um para cada tela, porque o gesto é diferente em cada uma.
-
-**No celular — empilhamento.** As fotos grudam no topo e cada uma sobe por cima
-da anterior, deixando uma faixa da anterior aparecendo, como um maço de fotos
-sendo folheado. É **puro CSS** (`position: sticky` com `top` crescente de 82px a
-136px), sem uma linha de JavaScript.
-
-> Detalhe que quebrou na primeira tentativa: a galeria usa `column-count`, e
-> coluna cria um contexto de formatação próprio onde **`position: sticky` para de
-> funcionar**. No celular a galeria de casamentos volta a `display: block` — como
-> lá ela já era de uma coluna só, não se perde nada.
-
-**No desktop — 3D conduzido pela rolagem.** Cada foto se inclina conforme a
-distância do centro da tela (`rotateX` até 8°), recua no eixo Z (até −80px) e
-perde opacidade nas bordas — como se as fotos estivessem espalhadas numa mesa e
-você passasse por cima delas. No hover, ela acompanha o cursor (`rotateY` ±5,5°).
-
-> Detalhe que quebrou aqui: essas fotos recebiam a classe `.revelar`, que tem
-> `transition: transform 700ms`. Com ela, o 3D **arrastava 700ms atrás da
-> rolagem**. O módulo 3D agora toma posse das fotos: remove a classe, zera a
-> transição e passa a ser ele o efeito de entrada delas.
-
-Os dois respeitam `prefers-reduced-motion` e a troca entre eles é reavaliada no
-`matchMedia` — ao passar de desktop para celular, o JS limpa todos os
-`transform` inline para não sujar o empilhamento.
-
-## Duas fotos tinham resíduo de recorte
-
-Achado ao conferir as bordas pixel a pixel: `cas-02-canoa-aereo` tinha uma
-**coluna fria de 3px na borda esquerda** e `cas-03-corredor-luzes` tinha uma
-**faixa ciano de 6px no topo** e uma coluna quase branca na esquerda — sobras do
-recorte original.
-
-A da canoa é a cortina esquerda da capa, onde aparecia **de alto a baixo da tela**.
-Ambas foram refeitas **a partir do PNG original**, não aparadas sobre o JPEG já
-salvo: recomprimir duas vezes num portfólio de fotógrafo não dá.
+Fica registrado que a incoerência existe — o logo aparece no topo de todas as
+páginas anunciando um serviço que a página não cita. Se um dia for para reverter,
+é um bloco na seção corporativa mais uma entrada no `hasOfferCatalog` do JSON-LD;
+o histórico do Git tem a versão pronta.
 
 ## Um bug que peguei no teste
 
