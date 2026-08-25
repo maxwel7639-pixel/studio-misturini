@@ -1,0 +1,450 @@
+/* =========================================================================
+   Estudio Misturini — casamentos cinematograficos e retratos de autoridade
+   Estilo: Portfolio Grid (padrao) + Dark Mode, recolorido para a hora dourada
+   das fotos dele. Paleta amostrada com PIL das proprias imagens:
+     retrato corporativo  #020202 · #0C0909 · #C59677 · #AF8366
+     capa cinematografica #1F1309 · #3D220D · #C38E4E · #925F2D
+     por do sol           #361F0C · #F9CDA5 · #FFE0B8
+   Todas as fotos caem entre H23 e H33 — a paleta ja estava pronta nelas.
+   ========================================================================= */
+
+:root{
+  /* superficies */
+  --preto:#0b0a09;
+  --carvao:#14120f;
+  --carvao-2:#1e1a16;
+  --linha:rgba(201,154,91,.22);
+  --linha-fraca:rgba(245,234,224,.1);
+
+  /* luz */
+  --creme:#f5eae0;
+  --creme-2:#b8a895;
+  --creme-3:#9c8b79;
+
+  /* hora dourada */
+  --ouro:#c99a5b;
+  --ouro-claro:#e8c79a;
+  --ouro-fundo:rgba(201,154,91,.12);
+
+  --sp1:.25rem; --sp2:.5rem; --sp3:.75rem; --sp4:1rem;
+  --sp5:1.5rem; --sp6:2rem;  --sp7:3rem;   --sp8:4rem;
+  --sp9:6rem;   --sp10:8rem;
+
+  --larg:1240px;
+  --raio:2px;
+
+  --tr:240ms cubic-bezier(.4,0,.2,1);
+  --tr-lento:520ms cubic-bezier(.22,1,.36,1);
+
+  --z-nav:20; --z-flutua:30; --z-lb:50;
+
+  --ff-tit:'Bodoni Moda', 'Didot', Georgia, serif;
+  --ff-corpo:'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:78px;
+  -webkit-text-size-adjust:100%;
+  color-scheme:dark;
+}
+
+body{
+  margin:0;
+  background:var(--preto);
+  color:var(--creme);
+  font-family:var(--ff-corpo);
+  font-size:1.0625rem;
+  line-height:1.72;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* Bodoni tem hastes finissimas: no escuro elas somem se usadas pequenas.
+   Por isso ela so aparece em tamanho grande, e o corpo todo e Jost. */
+h1,h2,h3{font-family:var(--ff-tit);font-weight:400;line-height:1.1;margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+img{max-width:100%;display:block;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;color:inherit}
+figure{margin:0}
+
+:focus-visible{outline:2px solid var(--ouro);outline-offset:3px}
+
+.pular{position:absolute;left:-9999px;top:0;z-index:100;background:var(--ouro);color:var(--preto);padding:.75rem 1.25rem;font-weight:500}
+.pular:focus{left:var(--sp4);top:var(--sp4)}
+
+/* ---------- tipos utilitarios ---------- */
+.olho{
+  display:inline-flex;align-items:center;gap:var(--sp3);
+  margin:0 0 var(--sp4);
+  font-size:.7rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--ouro);
+}
+.olho::before{content:"";width:26px;height:1px;background:var(--ouro);flex:none}
+
+.estrelas{color:var(--ouro);letter-spacing:.14em;font-size:.85rem}
+.estrelas--g{font-size:1.3rem;letter-spacing:.2em}
+
+/* ---------- botoes ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp3);
+  min-height:54px;padding:.9rem 1.9rem;
+  border:1px solid var(--ouro);border-radius:999px;
+  background:var(--ouro);color:var(--preto);
+  font-family:var(--ff-corpo);font-size:.94rem;font-weight:500;letter-spacing:.02em;
+  transition:background-color var(--tr),color var(--tr),border-color var(--tr),box-shadow var(--tr);
+}
+.btn:hover{background:var(--ouro-claro);border-color:var(--ouro-claro);box-shadow:0 8px 30px rgba(201,154,91,.22)}
+.btn--ouro{background:var(--ouro);color:var(--preto)}
+.btn--linha{background:transparent;color:var(--ouro);border-color:var(--linha)}
+.btn--linha:hover{background:var(--ouro-fundo);border-color:var(--ouro);color:var(--ouro-claro);box-shadow:none}
+
+/* ---------- cabecalho ---------- */
+.cab{
+  position:fixed;inset:0 0 auto 0;z-index:var(--z-nav);
+  border-bottom:1px solid transparent;
+  transition:background-color var(--tr),border-color var(--tr),backdrop-filter var(--tr);
+}
+.cab.solida{background:rgba(11,10,9,.9);backdrop-filter:blur(14px);border-bottom-color:var(--linha)}
+.cab__barra{
+  display:flex;align-items:center;justify-content:space-between;gap:var(--sp5);
+  width:100%;max-width:var(--larg);margin-inline:auto;
+  padding:var(--sp3) var(--sp5);min-height:70px;
+}
+.marca{display:inline-flex;align-items:center;gap:var(--sp3);min-height:44px}
+.marca__ico{width:30px;height:23px;flex:none;color:var(--ouro)}
+.marca__txt{display:flex;flex-direction:column;line-height:1.1}
+.marca__nome{font-family:var(--ff-tit);font-size:1.32rem;letter-spacing:.04em;color:var(--creme)}
+.marca__sub{font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ouro);margin-top:2px}
+.cab__nav{display:none;gap:var(--sp6)}
+.cab__nav a{position:relative;font-size:.88rem;letter-spacing:.04em;color:var(--creme-2);padding-block:var(--sp2);transition:color var(--tr)}
+.cab__nav a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--ouro);transform:scaleX(0);transform-origin:left;transition:transform var(--tr)}
+.cab__nav a:hover{color:var(--creme)}
+.cab__nav a:hover::after{transform:scaleX(1)}
+
+.hamb{
+  display:inline-flex;flex-direction:column;justify-content:center;gap:6px;
+  width:46px;height:46px;padding:0 11px;
+  background:transparent;border:1px solid var(--linha);border-radius:999px;
+  transition:border-color var(--tr);
+}
+.hamb:hover{border-color:var(--ouro)}
+.hamb span{display:block;width:100%;height:1.4px;background:var(--creme);border-radius:2px;transition:transform var(--tr)}
+.hamb[aria-expanded="true"] span:first-child{transform:translateY(3.7px) rotate(45deg)}
+.hamb[aria-expanded="true"] span:last-child{transform:translateY(-3.7px) rotate(-45deg)}
+
+.menu-mob{
+  position:fixed;inset:70px 0 auto 0;
+  display:flex;flex-direction:column;
+  padding:var(--sp5) var(--sp5) var(--sp6);
+  background:var(--preto);border-bottom:1px solid var(--linha);
+  animation:descer 240ms cubic-bezier(.22,1,.36,1);
+}
+.menu-mob[hidden]{display:none}
+.menu-mob a{display:flex;align-items:center;min-height:54px;font-size:1.05rem;color:var(--creme);border-bottom:1px solid var(--linha-fraca)}
+.menu-mob__cta{justify-content:center;border-bottom:0;margin-top:var(--sp5);color:var(--preto)}
+@keyframes descer{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+/* ---------- CAPA (diptico) ---------- */
+.capa{padding:104px var(--sp5) var(--sp7)}
+.capa__titulo{max-width:var(--larg);margin:0 auto var(--sp6);text-align:center}
+.capa__marca{
+  display:block;font-family:var(--ff-tit);
+  font-size:clamp(3rem,15vw,7rem);line-height:.95;letter-spacing:.02em;color:var(--creme);
+}
+.capa__tag{
+  display:block;margin-top:var(--sp4);
+  font-size:clamp(.72rem,2.6vw,.9rem);font-weight:400;
+  letter-spacing:.4em;text-transform:uppercase;color:var(--ouro);
+}
+.capa__tag i{font-style:normal;opacity:.5;margin-inline:.2em}
+/* no celular o espacamento largo jogava o separador sozinho para a
+   segunda linha; com menos tracking a tagline cabe numa linha so */
+@media (max-width:560px){
+  .capa__tag{letter-spacing:.22em}
+}
+.capa__linha{margin-top:var(--sp5);color:var(--creme-2);font-size:1rem;max-width:44ch;margin-inline:auto}
+
+.dip{display:grid;gap:var(--sp4);max-width:var(--larg);margin-inline:auto}
+.dip__lado{
+  position:relative;display:block;overflow:hidden;
+  border:1px solid var(--linha-fraca);border-radius:var(--raio);
+  aspect-ratio:4/5;
+}
+.dip__lado img{width:100%;height:100%;object-fit:cover;transition:transform var(--tr-lento),filter var(--tr-lento);filter:saturate(.96)}
+.dip__lado:hover img{transform:scale(1.045);filter:saturate(1.06)}
+.dip__veu{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(11,10,9,.94) 4%,rgba(11,10,9,.55) 34%,rgba(11,10,9,.12) 62%,rgba(11,10,9,.3) 100%);
+}
+.dip__txt{position:absolute;left:0;right:0;bottom:0;padding:var(--sp5);display:flex;flex-direction:column;gap:var(--sp2)}
+.dip__olho{font-size:.64rem;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--ouro)}
+.dip__tit{font-family:var(--ff-tit);font-size:clamp(1.5rem,5.4vw,2rem);line-height:1.1;color:var(--creme)}
+.dip__cta{
+  display:inline-flex;align-items:center;gap:.5rem;min-height:44px;
+  font-size:.86rem;font-weight:500;letter-spacing:.06em;color:var(--ouro-claro);
+}
+.dip__cta span{transition:transform var(--tr)}
+.dip__lado:hover .dip__cta span{transform:translateX(5px)}
+
+.capa__selo{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:var(--sp2) var(--sp3);
+  margin:var(--sp6) auto 0;padding-top:var(--sp5);
+  max-width:var(--larg);border-top:1px solid var(--linha);
+  font-size:.85rem;color:var(--creme-3);text-align:center;
+}
+.capa__selo strong{color:var(--creme);font-weight:500}
+
+/* ---------- BLOCOS ---------- */
+.bloco{padding:var(--sp8) var(--sp5);max-width:var(--larg);margin-inline:auto}
+.bloco--cas{border-top:1px solid var(--linha)}
+.bloco__cabeca{max-width:44rem;margin-bottom:var(--sp7)}
+.bloco__tit{font-size:clamp(2rem,7vw,3.4rem)}
+.bloco__tit em{font-style:italic;color:var(--ouro)}
+.bloco__linha{margin-top:var(--sp5);color:var(--creme-2);max-width:52ch}
+.bloco__pe{margin-top:var(--sp7);display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp4)}
+.bloco__nota{font-size:.82rem;color:var(--creme-3);font-style:italic}
+
+/* ---------- GALERIA ----------
+   Colunas fluidas em vez de grid com spans. Duas razoes:
+   1) o grid com spans mistos abria buracos no fim das linhas;
+   2) mais importante: aqui a foto aparece na proporcao em que ele
+      fotografou. Recortar o enquadramento de um fotografo no proprio
+      portfolio dele seria o pior erro possivel deste site. */
+.galeria{column-count:1;column-gap:var(--sp3)}
+.galeria--corp:not(:empty){margin-top:var(--sp7)}
+
+.foto{
+  position:relative;display:block;width:100%;
+  margin:0 0 var(--sp3);
+  break-inside:avoid;-webkit-column-break-inside:avoid;
+  overflow:hidden;border-radius:var(--raio);background:var(--carvao);
+  cursor:zoom-in;
+}
+.foto img{width:100%;height:auto;transition:transform var(--tr-lento),opacity var(--tr)}
+.foto:hover img{transform:scale(1.04)}
+.foto figcaption{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:var(--sp6) var(--sp4) var(--sp3);
+  background:linear-gradient(to top,rgba(11,10,9,.92),rgba(11,10,9,0));
+  font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro-claro);
+  opacity:0;transform:translateY(6px);
+  transition:opacity var(--tr),transform var(--tr);
+}
+.foto:hover figcaption,.foto:focus-within figcaption,.foto:focus figcaption{opacity:1;transform:none}
+
+/* no toque nao existe hover: a legenda fica sempre visivel */
+@media (hover:none){
+  .foto figcaption{opacity:1;transform:none}
+}
+
+/* ---------- RETRATOS CORPORATIVOS ---------- */
+.bloco--corp{border-top:1px solid var(--linha)}
+.corp{display:grid;gap:var(--sp6)}
+.corp__foto{position:relative;border-radius:var(--raio);overflow:hidden;max-width:400px}
+.corp__foto::after{content:"";position:absolute;inset:0;border:1px solid var(--linha);pointer-events:none;border-radius:var(--raio)}
+.corp__foto img{width:100%}
+.corp__linha{margin:var(--sp5) 0 var(--sp6);color:var(--creme-2);max-width:52ch}
+
+.virada{display:grid;gap:var(--sp4);margin-top:var(--sp5)}
+.virada p{position:relative;padding-left:var(--sp5);font-size:.95rem;max-width:46ch}
+.virada p::before{content:"";position:absolute;left:0;top:.55em;width:12px;height:1px}
+.virada span{
+  display:block;font-size:.66rem;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;margin-bottom:2px;
+}
+.virada__antes{color:var(--creme-3)}
+.virada__antes span{color:var(--creme-3)}
+.virada__antes::before{background:var(--creme-3)}
+.virada__depois{color:var(--creme)}
+.virada__depois span{color:var(--ouro)}
+.virada__depois::before{background:var(--ouro)}
+
+/* ---------- O FOTOGRAFO ---------- */
+.bloco--sobre{border-top:1px solid var(--linha)}
+.sobre{display:grid;gap:var(--sp6)}
+.sobre__num{display:flex;align-items:baseline;gap:var(--sp4)}
+.sobre__cifra{
+  font-family:var(--ff-tit);font-size:clamp(4.5rem,20vw,9rem);line-height:.82;
+  color:var(--ouro);font-variant-numeric:lining-nums;
+}
+.sobre__rot{font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--creme-3);line-height:1.5}
+.sobre__texto p{color:var(--creme-2);max-width:56ch}
+.sobre__texto p+p{margin-top:var(--sp4)}
+.sobre__texto strong{color:var(--creme);font-weight:400}
+.disciplinas{list-style:none;margin:var(--sp6) 0 0;padding:0;display:grid;gap:var(--sp4)}
+.disciplinas li{padding-left:var(--sp4);border-left:1px solid var(--linha);font-size:.9rem;color:var(--creme-3)}
+.disciplinas span{display:block;font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ouro);margin-bottom:2px}
+
+/* ---------- PROVA SOCIAL ---------- */
+.prova{background:var(--carvao);border-block:1px solid var(--linha);padding:var(--sp8) var(--sp5)}
+.prova__bloco{max-width:var(--larg);margin-inline:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--sp2)}
+.prova__nota{font-family:var(--ff-tit);font-size:clamp(3rem,12vw,5rem);line-height:1;color:var(--creme);margin-top:var(--sp3)}
+.prova__nota strong{font-weight:400}
+.prova__nota span{font-size:.3em;color:var(--creme-3);letter-spacing:.1em}
+.prova__txt{color:var(--creme-2);font-size:.98rem}
+.prova__txt strong{color:var(--creme);font-weight:400}
+.prova__link{
+  display:inline-flex;align-items:center;gap:.5rem;min-height:44px;margin-top:var(--sp3);
+  font-size:.88rem;letter-spacing:.06em;color:var(--ouro);
+  border-bottom:1px solid transparent;transition:border-color var(--tr),color var(--tr);
+}
+.prova__link:hover{color:var(--ouro-claro);border-bottom-color:var(--ouro-claro)}
+.prova__link span{transition:transform var(--tr)}
+.prova__link:hover span{transform:translateX(4px)}
+
+/* ---------- O ESTUDIO ---------- */
+.estudio{display:grid;gap:var(--sp6)}
+.estudio__texto p{color:var(--creme-2);max-width:46ch}
+.dados{margin:var(--sp6) 0 0;display:grid;gap:var(--sp5)}
+.dados div{display:flex;flex-direction:column;gap:2px}
+.dados dt{font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ouro)}
+.dados dd{margin:0;font-size:.98rem;color:var(--creme);line-height:1.6}
+.dados dd a{
+  display:inline-block;min-height:44px;padding-block:8px;
+  color:var(--creme);border-bottom:1px solid transparent;
+  transition:color var(--tr),border-color var(--tr);
+}
+.dados dd a:hover{color:var(--ouro);border-bottom-color:var(--ouro)}
+.estudio__midia{display:grid;gap:var(--sp4)}
+.estudio__foto{border-radius:var(--raio);overflow:hidden;border:1px solid var(--linha-fraca)}
+.estudio__foto img{width:100%;filter:saturate(.9) contrast(1.04)}
+.estudio__foto figcaption{padding:var(--sp3) var(--sp4);font-size:.8rem;color:var(--creme-3);font-style:italic;background:var(--carvao)}
+.estudio__mapa{position:relative;aspect-ratio:16/10;border:1px solid var(--linha-fraca);border-radius:var(--raio);overflow:hidden;background:var(--carvao)}
+/* nada de invert() no mapa: alem de deixar o texto estranho, inverte o
+   proprio logo do Google. Aqui so dessatura e baixa o brilho o suficiente
+   para o mapa nao brilhar no meio da pagina escura. */
+.estudio__mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.35) contrast(1.04) brightness(.9)}
+
+/* ---------- CHAMADA FINAL ---------- */
+.final{
+  position:relative;padding:var(--sp9) var(--sp5);
+  border-top:1px solid var(--linha);
+  background:radial-gradient(ellipse at 50% 120%,rgba(201,154,91,.16),rgba(11,10,9,0) 62%);
+}
+.final__bloco{max-width:46rem;margin-inline:auto;text-align:center}
+.final h2{font-size:clamp(1.9rem,6.6vw,3.2rem);color:var(--creme);margin-bottom:var(--sp6)}
+.final h2 em{font-style:italic;color:var(--ouro)}
+.final__acoes{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sp4)}
+.final__num{margin-top:var(--sp6);font-size:.85rem;letter-spacing:.12em;color:var(--creme-3)}
+
+/* ---------- RODAPE ---------- */
+.rodape{background:var(--carvao);border-top:1px solid var(--linha);padding:var(--sp8) var(--sp5) 96px}
+.rodape__grade{display:grid;gap:var(--sp6);width:100%;max-width:var(--larg);margin-inline:auto;padding-bottom:var(--sp6)}
+.rodape__marca{display:block;font-family:var(--ff-tit);font-size:1.7rem;letter-spacing:.04em;color:var(--creme)}
+.rodape__sub{display:block;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ouro);margin-top:3px}
+.rodape__tag{margin-top:var(--sp4);font-size:.8rem;letter-spacing:.24em;text-transform:uppercase;color:var(--creme-3)}
+.rodape__rot{display:block;font-size:.64rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ouro);margin-bottom:var(--sp4)}
+.rodape nav{display:flex;flex-direction:column}
+.rodape nav a{display:inline-flex;align-items:center;min-height:44px;font-size:.9rem;color:var(--creme-2);transition:color var(--tr)}
+.rodape nav a:hover{color:var(--ouro)}
+.rodape address{font-style:normal;font-size:.9rem;line-height:1.7;color:var(--creme-2)}
+.rodape__link{display:inline-flex;align-items:center;min-height:44px;font-size:.9rem;color:var(--creme-2);transition:color var(--tr)}
+.rodape__link:hover{color:var(--ouro)}
+.rodape__link+.rodape__link{margin-left:var(--sp5)}
+.rodape__base{
+  display:flex;flex-direction:column;gap:var(--sp3);
+  width:100%;max-width:var(--larg);margin-inline:auto;
+  padding-top:var(--sp5);border-top:1px solid var(--linha-fraca);
+}
+.rodape__base p{font-size:.78rem;color:var(--creme-3);max-width:64ch}
+.rodape__base a{color:var(--ouro);transition:color var(--tr)}
+.rodape__base a:hover{color:var(--ouro-claro)}
+
+/* ---------- BOTAO FLUTUANTE ---------- */
+.zap{
+  position:fixed;right:var(--sp4);bottom:var(--sp4);z-index:var(--z-flutua);
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp3);
+  width:56px;min-height:56px;padding:0;
+  background:#1fa855;color:#fff;border-radius:999px;
+  font-size:.9rem;font-weight:500;white-space:nowrap;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+  opacity:0;visibility:hidden;transform:translate3d(0,14px,0);
+  transition:opacity var(--tr),transform var(--tr),visibility var(--tr),background-color var(--tr),width var(--tr);
+}
+.zap.visivel{opacity:1;visibility:visible;transform:none}
+.zap:hover{background:#17914a}
+.zap svg{width:24px;height:24px;flex:none}
+.zap span{display:none}
+
+/* ---------- LIGHTBOX ---------- */
+.lb{
+  position:fixed;inset:0;z-index:var(--z-lb);
+  display:flex;align-items:center;justify-content:center;
+  padding:var(--sp5);
+  background:rgba(6,5,5,.97);
+  animation:surgir 200ms ease-out;
+}
+.lb[hidden]{display:none}
+@keyframes surgir{from{opacity:0}to{opacity:1}}
+.lb__palco{display:flex;flex-direction:column;align-items:center;gap:var(--sp4);max-width:100%;max-height:100%}
+.lb__palco img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:var(--raio)}
+.lb__palco figcaption{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ouro);text-align:center}
+.lb__fechar,.lb__nav{
+  position:absolute;display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;
+  background:rgba(20,18,15,.85);border:1px solid var(--linha);border-radius:999px;
+  color:var(--creme);font-size:1.7rem;line-height:1;
+  transition:background-color var(--tr),border-color var(--tr);
+}
+.lb__fechar:hover,.lb__nav:hover{background:var(--carvao-2);border-color:var(--ouro)}
+.lb__fechar{top:var(--sp4);right:var(--sp4)}
+.lb__nav--ant{left:var(--sp3);top:50%;transform:translateY(-50%)}
+.lb__nav--prox{right:var(--sp3);top:50%;transform:translateY(-50%)}
+
+/* ---------- revelacao ---------- */
+.revelar{opacity:0;transform:translate3d(0,20px,0);transition:opacity 700ms cubic-bezier(.22,1,.36,1),transform 700ms cubic-bezier(.22,1,.36,1)}
+.revelar.dentro{opacity:1;transform:none}
+
+/* =========================== RESPONSIVO =========================== */
+@media (min-width:480px){
+  .zap{width:auto;padding:0 1.4rem}
+  .zap span{display:inline}
+}
+
+@media (min-width:700px){
+  .dip{grid-template-columns:1fr 1fr}
+  .dip__lado{aspect-ratio:3/4}
+  .galeria{column-count:2}
+  .corp{grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:var(--sp7);align-items:center}
+  .virada{grid-template-columns:1fr 1fr;gap:var(--sp5)}
+  .disciplinas{grid-template-columns:repeat(3,1fr)}
+  .estudio__midia{grid-template-columns:1fr 1fr;align-items:start}
+  .bloco__pe{flex-direction:row;align-items:center;gap:var(--sp5)}
+}
+
+@media (min-width:1000px){
+  html{scroll-padding-top:92px}
+  .cab__barra{min-height:80px}
+  .cab__nav{display:inline-flex}
+  .hamb,.menu-mob{display:none}
+
+  .capa{padding:150px var(--sp6) var(--sp8)}
+  .bloco{padding:var(--sp9) var(--sp6)}
+  .galeria{column-count:3;column-gap:var(--sp4)}
+
+  .sobre{grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:var(--sp8);align-items:start}
+  .sobre__num{flex-direction:column;align-items:flex-start;gap:var(--sp2);position:sticky;top:120px}
+
+  .estudio{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:var(--sp8);align-items:center}
+  .estudio__midia{grid-template-columns:1fr}
+
+  .rodape{padding:var(--sp9) var(--sp6) 100px}
+  .rodape__grade{grid-template-columns:1.3fr .8fr 1fr;gap:var(--sp7)}
+  .rodape__base{flex-direction:row;align-items:center;justify-content:space-between}
+  .zap{right:var(--sp6);bottom:var(--sp6)}
+  .lb__fechar{top:var(--sp6);right:var(--sp6)}
+  .lb__nav--ant{left:var(--sp6)}
+  .lb__nav--prox{right:var(--sp6)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .revelar{opacity:1;transform:none}
+  .dip__lado:hover img,.foto:hover img{transform:none}
+}
