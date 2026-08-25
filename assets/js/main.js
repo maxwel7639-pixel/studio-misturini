@@ -176,6 +176,108 @@
     alvos.forEach(function (el) { obsRev.observe(el); });
   }
 
+
+  /* ---------- GALERIA DE CASAMENTOS: 3D no desktop ----------
+     Cada foto se inclina conforme a distancia do centro da tela e recua no
+     eixo Z, como se as fotos estivessem espalhadas numa mesa e voce passasse
+     por cima delas. No hover, ela acompanha o cursor.
+
+     No celular este modulo nao roda: la o efeito e o empilhamento, que e
+     puro CSS (position:sticky). */
+  (function () {
+    var gal = document.querySelector(".galeria--cas");
+    if (!gal || reduzir) return;
+
+    var mq = window.matchMedia("(min-width: 700px)");
+    var fotos = [];
+    var pedido = false;
+    var ligado = false;
+
+    function escrever(el) {
+      var sx = el._sx || 0, hx = el._hx || 0, hy = el._hy || 0, z = el._z || 0;
+      el.style.transform =
+        "perspective(1200px) rotateX(" + (sx + hx).toFixed(2) + "deg) rotateY(" +
+        hy.toFixed(2) + "deg) translateZ(" + z.toFixed(1) + "px)";
+    }
+
+    function pintar() {
+      pedido = false;
+      if (!ligado) return;
+      var meio = window.innerHeight / 2;
+      for (var i = 0; i < fotos.length; i++) {
+        var el = fotos[i];
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -240 || r.top > window.innerHeight + 240) continue;
+        var d = ((r.top + r.height / 2) - meio) / window.innerHeight;
+        if (d > 1) d = 1; else if (d < -1) d = -1;
+        el._sx = d * 8;                     // inclina para o centro
+        el._z = -Math.abs(d) * 80;          // afasta quem esta longe
+        el.style.opacity = (1 - Math.abs(d) * 0.4).toFixed(3);
+        escrever(el);
+      }
+    }
+
+    function agendar() {
+      if (pedido || !ligado) return;
+      pedido = true;
+      requestAnimationFrame(pintar);
+    }
+
+    function aoMover(e) {
+      var el = e.currentTarget;
+      var r = el.getBoundingClientRect();
+      el._hy = (((e.clientX - r.left) / r.width) - 0.5) * 11;
+      el._hx = (0.5 - ((e.clientY - r.top) / r.height)) * 7;
+      escrever(el);
+    }
+    function aoSair(e) {
+      var el = e.currentTarget;
+      el._hx = 0; el._hy = 0;
+      escrever(el);
+    }
+
+    function ligar() {
+      if (ligado) return;
+      ligado = true;
+      fotos = Array.prototype.slice.call(gal.querySelectorAll(".foto"));
+      fotos.forEach(function (el) {
+        // o modulo de revelacao poe .revelar nestas fotos, e a transicao de
+        // 700ms dele faria o 3D arrastar atras da rolagem. Aqui a entrada
+        // passa a ser o proprio 3D, entao a classe sai.
+        el.classList.remove("revelar", "dentro");
+        el.style.transition = "none";
+        el.addEventListener("mousemove", aoMover);
+        el.addEventListener("mouseleave", aoSair);
+      });
+      pintar();
+    }
+
+    function desligar() {
+      if (!ligado) return;
+      ligado = false;
+      fotos.forEach(function (el) {
+        el.removeEventListener("mousemove", aoMover);
+        el.removeEventListener("mouseleave", aoSair);
+        // limpa tudo: no celular quem manda e o sticky do CSS
+        el.style.transform = "";
+        el.style.opacity = "";
+        el.style.transition = "";
+        el._sx = el._hx = el._hy = el._z = 0;
+      });
+      fotos = [];
+    }
+
+    function avaliar() {
+      if (mq.matches) ligar(); else desligar();
+      agendar();
+    }
+
+    avaliar();
+    mq.addEventListener("change", avaliar);
+    window.addEventListener("scroll", agendar, { passive: true });
+    window.addEventListener("resize", agendar);
+  })();
+
   /* ---------- botao flutuante por publico ----------
      O site atende dois publicos com intencoes diferentes. O botao acompanha
      a secao que o visitante esta lendo e ja abre o WhatsApp com a mensagem

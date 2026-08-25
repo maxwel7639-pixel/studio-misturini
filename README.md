@@ -67,12 +67,10 @@ Não precisa mexer em CSS nem em JS:
 
 O segundo lote trouxe o que faltava. Ver *O que mudou no v2*, abaixo.
 
-### 2. Depoimentos
+### 2. ~~Depoimentos~~ — resolvidos
 
-O briefing previa "1-2 depoimentos reais depois". Não há nenhum no material,
-então **não inventei**: a prova social usa só o número verificável (4,9 em 47
-avaliações). Quando ele mandar os prints do Google, entram numa faixa nova
-antes do bloco de nota.
+Chegaram cinco prints de avaliações do Google. Quatro entraram; um não. Ver
+*Depoimentos*, abaixo.
 
 ### 3. Duas fotos têm texto gravado
 
@@ -204,6 +202,92 @@ Na primeira versão eu o deixei depois (para ele ficar por cima no modo cortina)
 sem JavaScript, o `<h1>` da página aparecia embaixo das duas fotos. Agora ele vem
 primeiro e a sobreposição é resolvida por `z-index`, não pela ordem.
 
+## Vídeo entrou no site
+
+A incoerência do logo foi resolvida: o site agora **menciona vídeo**, sem
+inventar uma galeria que não existe.
+
+- Um bloco curto na seção corporativa: *"Também em vídeo — institucional,
+  depoimento e conteúdo de posicionamento para redes. Dá para combinar foto e
+  vídeo na mesma diária."*
+- Entrou no `hasOfferCatalog` do JSON-LD como serviço próprio, para o Google
+  entender que o estúdio faz vídeo.
+- A `meta description` e a descrição do negócio no JSON-LD passaram a citar vídeo.
+
+**Não criei seção nem galeria de vídeo** de propósito: sem material, seria uma
+promessa vazia. Quando ele mandar um reel ou institucional, o lugar natural é
+logo abaixo desse bloco, e aí vira uma frente com peso próprio.
+
+## Depoimentos
+
+Vieram cinco prints de avaliações do Google. **Quatro entraram no site:** Daniel
+Fialho, Thayná Braga, Sheron Deconto e Julien Moura.
+
+São exibidos como **imagem, não como texto transcrito**. Transcrever viraria
+texto que qualquer um poderia ter escrito; o print carrega a interface do Google,
+a foto da pessoa, o número de avaliações e a data — é isso que faz dele prova.
+Cada um recebeu `alt` com o conteúdo por extenso, então leitor de tela e Google
+leem tudo.
+
+Os prints são claros e o site é escuro. Em vez de inverter — o que distorceria a
+interface do Google e destruiria justamente a credibilidade — cada um ganhou uma
+**moldura branca assumida**, como uma foto revelada presa numa parede escura.
+
+### ⚠️ A quinta avaliação ficou de fora, e o motivo importa
+
+A avaliação de **Stefany Oliveira Venancio** diz:
+
+> *"**A Lu é incrível.** Tive a oportunidade de fazer as fotos de natal e dias
+> das mães com ela e amei…"*
+
+Ela elogia **a Lu**, não o Giovani. O site inteiro é construído em torno dele
+como fotógrafo — colocar ali um depoimento que agradece outra pessoa confunde
+quem lê e, na prática, credita o trabalho a alguém que o site não apresenta.
+
+A avaliação da Sheron ("**a equipe** Misturini") confirma que existe equipe, e a
+Lu pode muito bem fazer parte dela. Se fizer, há duas saídas honestas: o site
+apresenta a equipe, e aí o depoimento faz sentido; ou ele fica de fora. **Vale
+perguntar ao Giovani quem é a Lu** — o print está no zip, pronto para entrar.
+
+## Efeitos da galeria de casamentos
+
+Dois efeitos diferentes, um para cada tela, porque o gesto é diferente em cada uma.
+
+**No celular — empilhamento.** As fotos grudam no topo e cada uma sobe por cima
+da anterior, deixando uma faixa da anterior aparecendo, como um maço de fotos
+sendo folheado. É **puro CSS** (`position: sticky` com `top` crescente de 82px a
+136px), sem uma linha de JavaScript.
+
+> Detalhe que quebrou na primeira tentativa: a galeria usa `column-count`, e
+> coluna cria um contexto de formatação próprio onde **`position: sticky` para de
+> funcionar**. No celular a galeria de casamentos volta a `display: block` — como
+> lá ela já era de uma coluna só, não se perde nada.
+
+**No desktop — 3D conduzido pela rolagem.** Cada foto se inclina conforme a
+distância do centro da tela (`rotateX` até 8°), recua no eixo Z (até −80px) e
+perde opacidade nas bordas — como se as fotos estivessem espalhadas numa mesa e
+você passasse por cima delas. No hover, ela acompanha o cursor (`rotateY` ±5,5°).
+
+> Detalhe que quebrou aqui: essas fotos recebiam a classe `.revelar`, que tem
+> `transition: transform 700ms`. Com ela, o 3D **arrastava 700ms atrás da
+> rolagem**. O módulo 3D agora toma posse das fotos: remove a classe, zera a
+> transição e passa a ser ele o efeito de entrada delas.
+
+Os dois respeitam `prefers-reduced-motion` e a troca entre eles é reavaliada no
+`matchMedia` — ao passar de desktop para celular, o JS limpa todos os
+`transform` inline para não sujar o empilhamento.
+
+## Duas fotos tinham resíduo de recorte
+
+Achado ao conferir as bordas pixel a pixel: `cas-02-canoa-aereo` tinha uma
+**coluna fria de 3px na borda esquerda** e `cas-03-corredor-luzes` tinha uma
+**faixa ciano de 6px no topo** e uma coluna quase branca na esquerda — sobras do
+recorte original.
+
+A da canoa é a cortina esquerda da capa, onde aparecia **de alto a baixo da tela**.
+Ambas foram refeitas **a partir do PNG original**, não aparadas sobre o JPEG já
+salvo: recomprimir duas vezes num portfólio de fotógrafo não dá.
+
 ## Um bug que peguei no teste
 
 O mapa estava apontando para o **número 845** — um condomínio residencial —
@@ -331,8 +415,12 @@ Chrome headless via CDP, na página servida de verdade:
 - Alvos de toque ≥ 44px (exceção consciente: "MX Digital", inline no crédito).
 - Contraste WCAG, tudo **AAA**: corpo 16,7:1 · secundário 8,6:1 · ouro 7,8:1 ·
   preto sobre ouro 7,8:1.
-- `prefers-reduced-motion` desliga revelações, zoom nas fotos, animações **e a
-  cortina da capa**.
+- `prefers-reduced-motion` desliga revelações, zoom nas fotos, animações, **a
+  cortina da capa e o 3D da galeria**.
+- Galeria de casamentos medida nos dois modos: no celular as 7 fotos são
+  `sticky` com `top` de 82px a 118px e sem `transform` inline; no desktop cada
+  uma recebe `rotateX`/`translateZ` que mudam com a rolagem, e o hover acrescenta
+  `rotateY`. Bordas de todas as imagens verificadas pixel a pixel.
 - Cortina medida em 1440×900 e 390×844, em cinco pontos da rolagem: os lados
   saem até fora da tela, o pôster chega a `opacity 1`, o título sai e a ponte
   entra — sem erro de JS e sem overflow horizontal em nenhum ponto.

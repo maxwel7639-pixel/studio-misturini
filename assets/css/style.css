@@ -327,6 +327,41 @@ figure{margin:0}
   .foto figcaption{opacity:1;transform:none}
 }
 
+/* ---------- GALERIA DE CASAMENTOS: empilhamento no celular ----------
+   So no celular. As cartas grudam no topo e a seguinte sobe por cima da
+   anterior, deixando uma faixa de cada uma aparecendo — como um maco de
+   fotos sendo folheado.
+   O column-count precisa sair: coluna cria contexto proprio e o sticky
+   deixa de funcionar dentro dela. */
+@media (max-width:699px){
+  .galeria--cas{column-count:initial;display:block}
+  .galeria--cas .foto{
+    position:sticky;
+    margin-bottom:var(--sp5);
+    box-shadow:0 -14px 40px rgba(0,0,0,.65);
+  }
+  /* cada uma para um pouco mais abaixo que a anterior */
+  .galeria--cas .foto:nth-child(1){top:82px}
+  .galeria--cas .foto:nth-child(2){top:88px}
+  .galeria--cas .foto:nth-child(3){top:94px}
+  .galeria--cas .foto:nth-child(4){top:100px}
+  .galeria--cas .foto:nth-child(5){top:106px}
+  .galeria--cas .foto:nth-child(6){top:112px}
+  .galeria--cas .foto:nth-child(7){top:118px}
+  .galeria--cas .foto:nth-child(8){top:124px}
+  .galeria--cas .foto:nth-child(9){top:130px}
+  .galeria--cas .foto:nth-child(n+10){top:136px}
+  /* no empilhamento a legenda nao pode depender de hover */
+  .galeria--cas .foto figcaption{opacity:1;transform:none}
+  /* a ultima precisa de folga para nao colar na proxima secao */
+  .galeria--cas .foto:last-child{margin-bottom:var(--sp7)}
+}
+
+/* no desktop o 3D e conduzido pelo JS; aqui so o que ele precisa */
+@media (min-width:700px){
+  .galeria--cas .foto{will-change:transform}
+}
+
 /* ---------- RETRATOS CORPORATIVOS ---------- */
 .bloco--corp{border-top:1px solid var(--linha)}
 .corp{display:grid;gap:var(--sp6)}
@@ -417,6 +452,40 @@ figure{margin:0}
 .prova__link:hover{color:var(--ouro-claro);border-bottom-color:var(--ouro-claro)}
 .prova__link span{transition:transform var(--tr)}
 .prova__link:hover span{transform:translateX(4px)}
+
+/* ---------- DEPOIMENTOS (prints do Google) ----------
+   Os prints sao claros e o site e escuro. Em vez de inverter — o que
+   distorceria a interface do Google e tiraria a credibilidade da prova —
+   cada print ganha uma moldura clara e assumida, como uma foto revelada
+   presa numa parede escura. */
+.depos{
+  list-style:none;margin:var(--sp7) auto 0;padding:0;
+  width:100%;max-width:var(--larg);
+  display:grid;gap:var(--sp4);
+}
+.depo{
+  background:#fff;border-radius:6px;
+  padding:var(--sp2);
+  box-shadow:0 2px 6px rgba(0,0,0,.5),0 18px 44px rgba(0,0,0,.45);
+  transition:transform var(--tr),box-shadow var(--tr);
+}
+.depo img{width:100%;border-radius:3px}
+.depo:hover{transform:translateY(-4px);box-shadow:0 4px 10px rgba(0,0,0,.55),0 26px 60px rgba(0,0,0,.5)}
+.depos__nota{
+  margin:var(--sp5) auto 0;text-align:center;
+  font-size:.78rem;letter-spacing:.08em;color:var(--creme-3);
+}
+
+/* ---------- video no bloco corporativo ---------- */
+.corp__video{
+  margin:0 0 var(--sp6);padding-left:var(--sp5);
+  border-left:1px solid var(--linha);
+  font-size:.92rem;color:var(--creme-2)!important;max-width:52ch;
+}
+.corp__video span{
+  display:block;font-size:.66rem;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ouro);margin-bottom:4px;
+}
 
 /* ---------- O ESTUDIO ---------- */
 .estudio{display:grid;gap:var(--sp6)}
@@ -534,6 +603,7 @@ figure{margin:0}
   .corp{grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:var(--sp7);align-items:center}
   .virada{grid-template-columns:1fr 1fr;gap:var(--sp5)}
   .disciplinas{grid-template-columns:repeat(3,1fr)}
+  .depos{grid-template-columns:repeat(2,1fr);gap:var(--sp5)}
   .estudio__midia{grid-template-columns:1fr 1fr;align-items:start}
   .bloco__pe{flex-direction:row;align-items:center;gap:var(--sp5)}
 }
@@ -556,6 +626,7 @@ figure{margin:0}
   .estudio__midia{grid-template-columns:1fr}
 
   .rodape{padding:var(--sp9) var(--sp6) 100px}
+  .depos{grid-template-columns:repeat(4,1fr)}
   .rodape__grade{grid-template-columns:1.3fr .8fr 1fr;gap:var(--sp7)}
   .rodape__base{flex-direction:row;align-items:center;justify-content:space-between}
   .zap{right:var(--sp6);bottom:var(--sp6)}
