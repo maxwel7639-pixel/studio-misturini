@@ -1,6 +1,6 @@
-# Estúdio Misturini — Giovani Misturini
+# Misturini Studio — Giovani Misturini
 
-Portfólio e apresentação do Estúdio Misturini, fotografia em Canoas/RS.
+Portfólio e apresentação do Misturini Studio, fotografia em Canoas/RS.
 Casamentos cinematográficos e retratos corporativos de posicionamento.
 
 **Stack:** HTML + CSS + JavaScript estático. Sem build, sem dependências.
@@ -63,15 +63,9 @@ Não precisa mexer em CSS nem em JS:
 
 ## Pendências
 
-### 1. Falta a foto do Giovani
+### 1. ~~Falta a foto do Giovani~~ — resolvido no v2
 
-O briefing pede "foto dele com câmera" na seção *Sobre*. **Ela não veio no zip** —
-das 10 imagens, 8 são de casamento, 1 é o retrato corporativo de uma cliente e
-1 é a fachada. Nenhuma é dele.
-
-A seção *O fotógrafo* foi montada **sem retrato**: um "15" gigante em Bodoni
-sustenta o bloco no lugar da foto. Funciona como está, mas se ele mandar uma
-foto com a câmera, ela entra à esquerda no lugar do número — ou ao lado dele.
+O segundo lote trouxe o que faltava. Ver *O que mudou no v2*, abaixo.
 
 ### 2. Depoimentos
 
@@ -91,12 +85,13 @@ antes do bloco de nota.
   um novo capítulo"*. Essa **mantive**: lê-se como autoria, não como banner de
   divulgação. Se ele quiser sem, é o mesmo tipo de recorte.
 
-### 4. Resolução das imagens
+### 4. Resolução das imagens — metade resolvida
 
-Todas chegaram entre 400 e 500px de largura — provavelmente baixadas do
-Instagram. Servem bem no celular e na galeria, mas em tela grande no lightbox
-aparecem no limite. **Vale pedir os originais** antes de publicar: é o portfólio
-de um fotógrafo, e a nitidez é o produto.
+As **fotos do Giovani e o logo** vieram em boa resolução no v2 (747–947px).
+As **fotos de casamento e o retrato corporativo continuam entre 400 e 500px** —
+provavelmente baixadas do Instagram. Servem no celular e na galeria, mas no
+lightbox em tela grande já aparecem no limite. **Vale pedir os originais dessas**
+antes de publicar: é o portfólio de um fotógrafo, e a nitidez é o produto.
 
 ### 5. Domínio
 
@@ -107,6 +102,62 @@ Se o domínio final for outro, trocar nesses três pontos do `<head>`.
 > `og-misturini.jpg` mudar, salvar com nome novo e atualizar as tags.
 
 ---
+
+## O que mudou no v2
+
+O segundo lote resolveu a maior pendência e trouxe três coisas que eu não tinha.
+
+**1. O retrato do Giovani.** Era a pendência número 1. Ele aparece agora na seção
+*O fotógrafo*, de braços cruzados com uma **Zenit analógica** — que casa com a
+narrativa de fotojornalismo e fine art melhor do que qualquer foto posada com
+equipamento digital. O "15 anos" deixou de ser um número solto e virou selo sobre
+o próprio retrato.
+
+**2. A bio, nas palavras dele.** Eu tinha escrito "jornalismo, fotografia técnica
+e fine art" a partir do briefing. O texto dele diz **"fotojornalismo, fotografia
+artística e o refinamento do Fine Art"**. Troquei pelo original — inclusive a
+abertura *"Quem está por trás das suas melhores memórias? Muito prazer, eu sou
+Giovani Misturini."*, que virou a linha de entrada da seção.
+
+**3. A frase dele virou seção.** *"Não é só o que eu vejo pela lente — é o que eu
+sinto ao transformar instantes em eternidade."* Ganhou uma faixa própria, ao lado
+da foto dele olhando pelo visor — a foto casa literalmente com a frase. O texto
+está em HTML, não gravado na imagem, então reflui no celular e é lido pelo Google.
+
+**4. O logo oficial substituiu o desenho.** Eu tinha desenhado uma câmera em SVG
+como marca provisória. Agora é a câmera do logo dele — com o fundo preto chapado
+removido por alfa, para assentar em qualquer superfície escura — e o favicon foi
+refeito a partir dela.
+
+**5. O nome da marca mudou.** O logo diz **"Misturini Studio"**, e o briefing
+também. O site usava "Estúdio Misturini" no título, no Open Graph e no rodapé.
+Corrigi tudo para *Misturini Studio*; "Estúdio Misturini" ficou como
+`alternateName` no JSON-LD, porque **é assim que o Google lista o negócio** — os
+dois nomes precisam existir para a busca casar.
+
+**6. O ouro foi ajustado.** A paleta vinha das fotos (matiz 33°). O logo usa um
+dourado mais saturado e amarelo (`#CA9E33`, matiz 40°). Movi o token de `#C99A5B`
+para **`#C99A4B`**, um meio-termo. Não adotei o amarelo do logo puro de propósito:
+em texto pequeno sobre preto ele lê como "amarelo de aviso", não como premium —
+e brigaria com o âmbar quente das fotos, que ocupam quase toda a página.
+
+### ⚠️ Uma pergunta que o logo levantou
+
+A assinatura do logo dele diz **"VÍDEOS E RETRATOS CORPORATIVOS"**.
+
+**Vídeo não está em lugar nenhum do site** — nem no briefing, nem no material.
+Não inventei uma seção sem ter o que mostrar, mas isso deixa uma incoerência: o
+logo aparece no topo de todas as páginas anunciando um serviço que o site não
+menciona.
+
+Três saídas, e a escolha é dele:
+1. Ele manda material de vídeo e vira uma terceira frente;
+2. O site cita vídeo em uma linha na seção corporativa, sem galeria;
+3. Fica como está, e o logo no cabeçalho segue só como marca — que é o mais
+   provável, já que no tamanho do cabeçalho a linha da assinatura é ilegível
+   (uso só a câmera do logo ali, não o lettering).
+
+Vale perguntar ao Giovani, porque muda o posicionamento do negócio, não só o site.
 
 ## Um bug que peguei no teste
 
@@ -180,15 +231,25 @@ As 10 do zip, separadas por categoria antes de decidir onde entravam:
 | `cas-07-saida-igreja` | casamento | Galeria |
 | `cas-08-silhueta-lua` | casamento | Galeria |
 | `fachada` | estúdio | Seção *O estúdio* |
+| `giovani-retrato` **(v2)** | o fotógrafo | Seção *O fotógrafo* |
+| `giovani-lente` **(v2)** | o fotógrafo | Faixa da frase dele |
+| `logo-camera` **(v2)** | marca | Cabeçalho (câmera do logo, fundo removido) |
+| `logo-misturini` **(v2)** | marca | Logo completo, guardado para uso futuro |
+
+Do v2 sobrou **uma imagem não usada**: `14_giovani_frase_instantes_eternidade`
+(ele sorrindo, câmera erguida). Ficaram três retratos dele e num portfólio o
+trabalho é que precisa aparecer — usei os dois mais fortes. Está no zip se ele
+quiser trocar algum.
 
 Geradas: `og-misturini.jpg` (1200×630, composta com PIL sobre a foto da igreja) e
-`favicon.png` (a câmera do letreiro dele, desenhada).
+`favicon.png` — agora recortado do **logo oficial**, não mais desenhado à mão.
 
 ## Estrutura
 
 **Capa (díptico)** → **Casamentos** (galeria + CTA) → **Retratos corporativos**
-(editorial + CTA) → **O fotógrafo** → **Prova social** → **O estúdio** (fachada +
-mapa) → **chamada final com dois botões** → rodapé.
+(editorial + CTA) → **O fotógrafo** (retrato + bio dele) → **A frase dele** →
+**Prova social** → **O estúdio** (fachada + mapa) → **chamada final com dois
+botões** → rodapé.
 
 ## O botão flutuante muda de público
 

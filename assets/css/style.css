@@ -13,7 +13,7 @@
   --preto:#0b0a09;
   --carvao:#14120f;
   --carvao-2:#1e1a16;
-  --linha:rgba(201,154,91,.22);
+  --linha:rgba(201,154,75,.24);
   --linha-fraca:rgba(245,234,224,.1);
 
   /* luz */
@@ -22,7 +22,7 @@
   --creme-3:#9c8b79;
 
   /* hora dourada */
-  --ouro:#c99a5b;
+  --ouro:#c99a4b;        /* meio-termo entre a foto (H33) e o logo (H40) */
   --ouro-claro:#e8c79a;
   --ouro-fundo:rgba(201,154,91,.12);
 
@@ -98,7 +98,7 @@ figure{margin:0}
   font-family:var(--ff-corpo);font-size:.94rem;font-weight:500;letter-spacing:.02em;
   transition:background-color var(--tr),color var(--tr),border-color var(--tr),box-shadow var(--tr);
 }
-.btn:hover{background:var(--ouro-claro);border-color:var(--ouro-claro);box-shadow:0 8px 30px rgba(201,154,91,.22)}
+.btn:hover{background:var(--ouro-claro);border-color:var(--ouro-claro);box-shadow:0 8px 30px rgba(201,154,75,.24)}
 .btn--ouro{background:var(--ouro);color:var(--preto)}
 .btn--linha{background:transparent;color:var(--ouro);border-color:var(--linha)}
 .btn--linha:hover{background:var(--ouro-fundo);border-color:var(--ouro);color:var(--ouro-claro);box-shadow:none}
@@ -116,7 +116,7 @@ figure{margin:0}
   padding:var(--sp3) var(--sp5);min-height:70px;
 }
 .marca{display:inline-flex;align-items:center;gap:var(--sp3);min-height:44px}
-.marca__ico{width:30px;height:23px;flex:none;color:var(--ouro)}
+.marca__ico{width:auto;height:26px;flex:none}
 .marca__txt{display:flex;flex-direction:column;line-height:1.1}
 .marca__nome{font-family:var(--ff-tit);font-size:1.32rem;letter-spacing:.04em;color:var(--creme)}
 .marca__sub{font-size:.56rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ouro);margin-top:2px}
@@ -267,18 +267,54 @@ figure{margin:0}
 /* ---------- O FOTOGRAFO ---------- */
 .bloco--sobre{border-top:1px solid var(--linha)}
 .sobre{display:grid;gap:var(--sp6)}
-.sobre__num{display:flex;align-items:baseline;gap:var(--sp4)}
-.sobre__cifra{
-  font-family:var(--ff-tit);font-size:clamp(4.5rem,20vw,9rem);line-height:.82;
-  color:var(--ouro);font-variant-numeric:lining-nums;
+.sobre__foto{position:relative;border-radius:var(--raio);overflow:hidden;max-width:420px}
+.sobre__foto img{width:100%}
+.sobre__foto::after{content:"";position:absolute;inset:0;border:1px solid var(--linha);border-radius:var(--raio);pointer-events:none}
+/* o "15 anos" deixa de ser um bloco solto e vira selo sobre o retrato */
+.sobre__anos{
+  position:absolute;left:0;bottom:0;
+  display:flex;align-items:baseline;gap:.4rem;
+  padding:var(--sp5) var(--sp4) var(--sp4);
+  font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--creme-2);
+  background:linear-gradient(to top,rgba(11,10,9,.92),rgba(11,10,9,0));
+  width:100%;
 }
-.sobre__rot{font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--creme-3);line-height:1.5}
+.sobre__anos b{
+  font-family:var(--ff-tit);font-size:2.6rem;font-weight:400;line-height:.9;
+  color:var(--ouro);letter-spacing:0;font-variant-numeric:lining-nums;
+}
 .sobre__texto p{color:var(--creme-2);max-width:56ch}
 .sobre__texto p+p{margin-top:var(--sp4)}
 .sobre__texto strong{color:var(--creme);font-weight:400}
+.sobre__abre{
+  margin-top:var(--sp5);
+  font-family:var(--ff-tit);font-size:clamp(1.15rem,3.4vw,1.5rem);line-height:1.35;
+  color:var(--creme)!important;font-style:italic;margin-bottom:var(--sp5);
+}
 .disciplinas{list-style:none;margin:var(--sp6) 0 0;padding:0;display:grid;gap:var(--sp4)}
 .disciplinas li{padding-left:var(--sp4);border-left:1px solid var(--linha);font-size:.9rem;color:var(--creme-3)}
 .disciplinas span{display:block;font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ouro);margin-bottom:2px}
+
+/* ---------- A FRASE DELE ---------- */
+.citacao{
+  display:grid;gap:var(--sp5);align-items:center;
+  padding:var(--sp8) var(--sp5);
+  max-width:var(--larg);margin-inline:auto;
+  border-top:1px solid var(--linha);
+}
+.citacao__foto{border-radius:var(--raio);overflow:hidden;max-width:300px;justify-self:center}
+.citacao__foto img{width:100%}
+.citacao__txt{margin:0}
+.citacao__txt p{
+  font-family:var(--ff-tit);font-style:italic;
+  font-size:clamp(1.45rem,5vw,2.4rem);line-height:1.28;color:var(--creme);
+}
+.citacao__txt em{font-style:italic;color:var(--ouro)}
+.citacao__txt cite{
+  display:block;margin-top:var(--sp5);
+  font-family:var(--ff-corpo);font-style:normal;
+  font-size:.76rem;letter-spacing:.24em;text-transform:uppercase;color:var(--creme-3);
+}
 
 /* ---------- PROVA SOCIAL ---------- */
 .prova{background:var(--carvao);border-block:1px solid var(--linha);padding:var(--sp8) var(--sp5)}
@@ -324,7 +360,7 @@ figure{margin:0}
 .final{
   position:relative;padding:var(--sp9) var(--sp5);
   border-top:1px solid var(--linha);
-  background:radial-gradient(ellipse at 50% 120%,rgba(201,154,91,.16),rgba(11,10,9,0) 62%);
+  background:radial-gradient(ellipse at 50% 120%,rgba(201,154,75,.16),rgba(11,10,9,0) 62%);
 }
 .final__bloco{max-width:46rem;margin-inline:auto;text-align:center}
 .final h2{font-size:clamp(1.9rem,6.6vw,3.2rem);color:var(--creme);margin-bottom:var(--sp6)}
@@ -427,8 +463,9 @@ figure{margin:0}
   .bloco{padding:var(--sp9) var(--sp6)}
   .galeria{column-count:3;column-gap:var(--sp4)}
 
-  .sobre{grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:var(--sp8);align-items:start}
-  .sobre__num{flex-direction:column;align-items:flex-start;gap:var(--sp2);position:sticky;top:120px}
+  .sobre{grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);gap:var(--sp8);align-items:center}
+  .citacao{grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:var(--sp8);padding-inline:var(--sp6)}
+  .citacao__foto{justify-self:start}
 
   .estudio{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:var(--sp8);align-items:center}
   .estudio__midia{grid-template-columns:1fr}
