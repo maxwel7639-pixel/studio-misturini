@@ -65,6 +65,76 @@
     if (!travas) document.body.style.overflow = "";
   }
 
+
+  /* ---------- CAPA: cortina que abre com a rolagem ----------
+     A secao fica com 230vh e o miolo gruda na tela (sticky). O progresso da
+     rolagem dentro dela move os dois lados para fora e revela o poster da
+     secao de casamentos atras.
+
+     A classe .capa--cortina so entra aqui, nunca no HTML: sem JS, ou com
+     prefers-reduced-motion, a capa continua sendo o diptico estatico. */
+  (function () {
+    var capa = document.querySelector(".capa");
+    if (!capa || reduzir) return;
+    if (!CSS.supports || !CSS.supports("position", "sticky")) return;
+
+    var fixo = capa.querySelector(".capa__fixo");
+    var lados = capa.querySelectorAll(".dip__lado");
+    var revelo = capa.querySelector(".revelo");
+    var titulo = capa.querySelector(".capa__titulo");
+    var ponte = capa.querySelector(".capa__ponte");
+    if (!fixo || lados.length !== 2 || !revelo || !titulo || !ponte) return;
+
+    capa.classList.add("capa--cortina");
+
+    var esq = lados[0], dir = lados[1];
+    var pedido = false;
+
+    function faixa(p, a, b) {
+      return Math.min(1, Math.max(0, (p - a) / (b - a)));
+    }
+    function suavizar(t) {          // smoothstep: sem solavanco nas pontas
+      return t * t * (3 - 2 * t);
+    }
+
+    function pintar() {
+      pedido = false;
+      var curso = capa.offsetHeight - window.innerHeight;
+      if (curso <= 0) return;
+      var p = Math.min(1, Math.max(0, -capa.getBoundingClientRect().top / curso));
+
+      // as cortinas abrem ate 72% do curso; o resto e respiro antes de soltar
+      var abre = suavizar(faixa(p, 0, 0.72));
+      esq.style.transform = "translate3d(" + (-101 * abre) + "%,0,0)";
+      dir.style.transform = "translate3d(" + (101 * abre) + "%,0,0)";
+      // depois de abertas, nao podem mais interceptar cliques
+      var passou = abre > 0.92 ? "none" : "";
+      esq.style.pointerEvents = passou;
+      dir.style.pointerEvents = passou;
+
+      var ap = faixa(p, 0.06, 0.6);
+      revelo.style.opacity = ap;
+      revelo.style.transform = "scale(" + (0.88 + 0.12 * suavizar(ap)) + ")";
+
+      titulo.style.opacity = 1 - faixa(p, 0, 0.34);
+
+      var pp = faixa(p, 0.62, 0.9);
+      ponte.style.opacity = pp;
+      ponte.setAttribute("data-off", pp < 0.5 ? "1" : "0");
+      ponte.querySelector("a").tabIndex = pp < 0.5 ? -1 : 0;
+    }
+
+    function agendar() {
+      if (pedido) return;
+      pedido = true;
+      requestAnimationFrame(pintar);
+    }
+
+    pintar();
+    window.addEventListener("scroll", agendar, { passive: true });
+    window.addEventListener("resize", agendar);
+  })();
+
   /* ---------- galeria vazia nao ocupa espaco ----------
      A galeria corporativa nasce sem <figure> (so com o comentario-modelo).
      O :empty do CSS nao e confiavel com quebras de linha dentro do elemento,

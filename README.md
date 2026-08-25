@@ -79,8 +79,9 @@ antes do bloco de nota.
 - `cas-01` (o beijo na igreja) vinha com **"CASAMENTOS CINEMATOGRÁFICOS ·
   Giovani Misturini"** gravado embaixo. Na galeria isso vira ruído — o site já
   diz isso no título da seção. **Recortei** a faixa do texto para a versão da
-  galeria. A arte original está guardada em
-  `assets/img/cas-01-capa-original.jpg`, caso ele prefira usá-la.
+  galeria. A arte original **passou a ser usada**: é ela que a cortina da capa
+  revela, e ali o título gravado funciona a favor — anuncia a seção que vem em
+  seguida.
 - `cas-03` (a noiva no corredor) tem gravado *"ela caminhava para o início de
   um novo capítulo"*. Essa **mantive**: lê-se como autoria, não como banner de
   divulgação. Se ele quiser sem, é o mesmo tipo de recorte.
@@ -159,6 +160,50 @@ Três saídas, e a escolha é dele:
 
 Vale perguntar ao Giovani, porque muda o posicionamento do negócio, não só o site.
 
+## A capa é uma cortina
+
+A capa não rola junto com a página: ela **trava na tela** e, conforme você rola,
+os dois lados do díptico **abrem para fora** e revelam o pôster da seção de
+casamentos atrás. Quando termina de abrir, a página segue para *Casamentos*.
+
+Como está feito:
+
+- A seção tem **230vh** de altura e o miolo (`.capa__fixo`) é `position: sticky`
+  com `100vh`. O que "prende" a capa é essa diferença — não há bloqueio de
+  rolagem, então o gesto do usuário continua sendo o normal do navegador.
+- O progresso da rolagem dentro da seção (0 → 1) move tudo: os lados saem com
+  `translate3d`, o pôster entra com `opacity` + `scale`, o título sai, e no fim
+  a ponte para o outro público aparece. **Só `transform` e `opacity`**, dentro de
+  um `requestAnimationFrame` — nada que force recálculo de layout a cada quadro.
+- A curva é um *smoothstep*, não linear: sem isso o movimento "bate" nas pontas.
+- Os dois lados têm **50,4%** de largura cada, então se sobrepõem 0,8% no centro
+  e a emenda não aparece. (A primeira versão tinha uma faixa preta cobrindo a
+  emenda; ela cortava o pôster ao meio depois que as cortinas abriam — removida.)
+
+**O que acontece sem JavaScript, ou com `prefers-reduced-motion: reduce`:** a
+classe `.capa--cortina` **nunca entra**, e a capa continua sendo o díptico
+estático de sempre — mesma altura, mesmas duas fotos, mesmos dois CTAs. O pôster
+e a ponte ficam `display: none`. Testado nos dois casos.
+
+### O que a cortina custou, e como paguei
+
+Quando as cortinas abrem, **os dois CTAs saem da tela junto com elas** — e esses
+CTAs são a arquitetura de dois públicos do site inteiro. Duas coisas seguram isso:
+
+1. O **menu do topo** ("Casamentos" / "Retratos") fica visível o tempo todo e é
+   fixo — os dois caminhos nunca somem de verdade.
+2. No fim da abertura entra uma linha sobre o pôster: **"Prefere retratos
+   corporativos? →"**. É o momento exato em que o site está prestes a levar todo
+   mundo para casamentos; ali o segundo público recebe uma saída própria.
+
+Não dupliquei os dois botões sobre o pôster de propósito: links repetidos
+confundem leitor de tela e diluem o sinal de SEO.
+
+**Um detalhe de ordem no HTML:** o título precisa vir **antes** das fotos no DOM.
+Na primeira versão eu o deixei depois (para ele ficar por cima no modo cortina) e,
+sem JavaScript, o `<h1>` da página aparecia embaixo das duas fotos. Agora ele vem
+primeiro e a sobreposição é resolvida por `z-index`, não pela ordem.
+
 ## Um bug que peguei no teste
 
 O mapa estava apontando para o **número 845** — um condomínio residencial —
@@ -235,6 +280,7 @@ As 10 do zip, separadas por categoria antes de decidir onde entravam:
 | `giovani-lente` **(v2)** | o fotógrafo | Faixa da frase dele |
 | `logo-camera` **(v2)** | marca | Cabeçalho (câmera do logo, fundo removido) |
 | `logo-misturini` **(v2)** | marca | Logo completo, guardado para uso futuro |
+| `cas-01-capa-original` | casamento | **Pôster revelado pela cortina da capa** |
 
 Do v2 sobrou **uma imagem não usada**: `14_giovani_frase_instantes_eternidade`
 (ele sorrindo, câmera erguida). Ficaram três retratos dele e num portfólio o
@@ -246,7 +292,7 @@ Geradas: `og-misturini.jpg` (1200×630, composta com PIL sobre a foto da igreja)
 
 ## Estrutura
 
-**Capa (díptico)** → **Casamentos** (galeria + CTA) → **Retratos corporativos**
+**Capa (díptico em cortina)** → **Casamentos** (galeria + CTA) → **Retratos corporativos**
 (editorial + CTA) → **O fotógrafo** (retrato + bio dele) → **A frase dele** →
 **Prova social** → **O estúdio** (fachada + mapa) → **chamada final com dois
 botões** → rodapé.
@@ -285,7 +331,13 @@ Chrome headless via CDP, na página servida de verdade:
 - Alvos de toque ≥ 44px (exceção consciente: "MX Digital", inline no crédito).
 - Contraste WCAG, tudo **AAA**: corpo 16,7:1 · secundário 8,6:1 · ouro 7,8:1 ·
   preto sobre ouro 7,8:1.
-- `prefers-reduced-motion` desliga revelações, zoom nas fotos e animações.
+- `prefers-reduced-motion` desliga revelações, zoom nas fotos, animações **e a
+  cortina da capa**.
+- Cortina medida em 1440×900 e 390×844, em cinco pontos da rolagem: os lados
+  saem até fora da tela, o pôster chega a `opacity 1`, o título sai e a ponte
+  entra — sem erro de JS e sem overflow horizontal em nenhum ponto.
+- Fallback conferido nos dois cenários: **sem JavaScript** e com
+  **`prefers-reduced-motion: reduce`**, a capa volta a ser o díptico estático.
 - A revelação no scroll é aplicada **por JS**, nunca no HTML: `.revelar` começa
   com `opacity: 0`, e num portfólio as fotos são o produto — se o JS falhasse,
   a página inteira ficaria invisível. Sem JS, tudo aparece normalmente.

@@ -105,41 +105,57 @@
 
 <main id="conteudo">
 
-<!-- ============ CAPA — díptico: um lado para cada público ============ -->
-<section class="capa">
-  <div class="capa__titulo">
-    <h1>
-      <span class="capa__marca">Misturini</span>
-      <span class="capa__tag">Imagem <i>•</i> Presença <i>•</i> Autoridade</span>
-    </h1>
-    <p class="capa__linha">Quinze anos fotografando em Canoas. Duas histórias diferentes — escolha a sua.</p>
-  </div>
+<!-- ============ CAPA — diptico: um lado para cada publico ============
+     Com JS, esta secao vira uma cortina: os dois lados abrem conforme a
+     rolagem e revelam o poster da secao de casamentos atras. Sem JS ou com
+     prefers-reduced-motion, ela continua sendo o diptico estatico de sempre
+     (o .revelo e a .capa__ponte ficam display:none ate o JS ligar). -->
+<section class="capa" id="capa">
+  <div class="capa__fixo">
 
-  <div class="dip">
-    <a class="dip__lado" href="#casamentos" data-lado="casamento">
-      <img src="assets/img/cas-02-canoa-aereo.jpg" width="398" height="670" alt="Vista de cima de um casal abraçado dentro de uma canoa de madeira, com o buquê e um chapéu ao lado." fetchpriority="high" decoding="async">
-      <span class="dip__veu" aria-hidden="true"></span>
-      <span class="dip__txt">
-        <span class="dip__olho">Para casais</span>
-        <span class="dip__tit">Casamentos<br>cinematográficos</span>
-        <span class="dip__cta">Ver casamentos <span aria-hidden="true">→</span></span>
-      </span>
-    </a>
-    <a class="dip__lado" href="#corporativo" data-lado="corporativo">
-      <img src="assets/img/corp-01-retrato.jpg" width="398" height="670" alt="Retrato corporativo de uma mulher de blazer preto com botões dourados, em fundo escuro dramático." fetchpriority="high" decoding="async">
-      <span class="dip__veu" aria-hidden="true"></span>
-      <span class="dip__txt">
-        <span class="dip__olho">Para profissionais</span>
-        <span class="dip__tit">Retratos de<br>posicionamento</span>
-        <span class="dip__cta">Ver retratos <span aria-hidden="true">→</span></span>
-      </span>
-    </a>
-  </div>
+    <div class="capa__titulo">
+      <h1>
+        <span class="capa__marca">Misturini</span>
+        <span class="capa__tag">Imagem <i>&#8226;</i> Presença <i>&#8226;</i> Autoridade</span>
+      </h1>
+      <p class="capa__linha">Quinze anos fotografando em Canoas. Duas histórias diferentes — escolha a sua.</p>
+      <p class="capa__selo">
+        <span class="estrelas" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <strong>4,9</strong> · 47 avaliações no Google · Canoas/RS
+      </p>
+    </div>
 
-  <p class="capa__selo">
-    <span class="estrelas" aria-hidden="true">★★★★★</span>
-    <strong>4,9</strong> · 47 avaliações no Google · Canoas/RS
-  </p>
+    <figure class="revelo">
+      <img src="assets/img/cas-01-capa-original.jpg" width="498" height="627" alt="Casal de noivos se beijando no altar de uma igreja iluminada, sob o título Casamentos Cinematográficos." loading="lazy" decoding="async">
+    </figure>
+
+    <div class="dip">
+      <a class="dip__lado" href="#casamentos" data-lado="casamento">
+        <img src="assets/img/cas-02-canoa-aereo.jpg" width="398" height="670" alt="Vista de cima de um casal abraçado dentro de uma canoa de madeira, com o buquê e um chapéu ao lado." fetchpriority="high" decoding="async">
+        <span class="dip__veu" aria-hidden="true"></span>
+        <span class="dip__txt">
+          <span class="dip__olho">Para casais</span>
+          <span class="dip__tit">Casamentos<br>cinematográficos</span>
+          <span class="dip__cta">Ver casamentos <span aria-hidden="true">&#8594;</span></span>
+        </span>
+      </a>
+      <a class="dip__lado" href="#corporativo" data-lado="corporativo">
+        <img src="assets/img/corp-01-retrato.jpg" width="398" height="670" alt="Retrato corporativo de uma mulher de blazer preto com botões dourados, em fundo escuro dramático." fetchpriority="high" decoding="async">
+        <span class="dip__veu" aria-hidden="true"></span>
+        <span class="dip__txt">
+          <span class="dip__olho">Para profissionais</span>
+          <span class="dip__tit">Retratos de<br>posicionamento</span>
+          <span class="dip__cta">Ver retratos <span aria-hidden="true">&#8594;</span></span>
+        </span>
+      </a>
+    </div>
+
+    <!-- quando a cortina abre, o caminho do outro publico continua a um clique -->
+    <p class="capa__ponte">
+      <a href="#corporativo">Prefere retratos corporativos? <span aria-hidden="true">&#8594;</span></a>
+    </p>
+
+  </div>
 </section>
 
 <!-- ============ CASAMENTOS ============ -->

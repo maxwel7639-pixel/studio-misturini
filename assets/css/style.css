@@ -110,6 +110,14 @@ figure{margin:0}
   transition:background-color var(--tr),border-color var(--tr),backdrop-filter var(--tr);
 }
 .cab.solida{background:rgba(11,10,9,.9);backdrop-filter:blur(14px);border-bottom-color:var(--linha)}
+/* no alto da pagina a barra fica sobre a foto: sem este veu, o logo e o menu
+   somem contra as areas claras da imagem */
+.cab::before{
+  content:"";position:absolute;inset:0 0 -28px;z-index:-1;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(11,10,9,.92),rgba(11,10,9,.55) 55%,rgba(11,10,9,0));
+  transition:opacity var(--tr);
+}
+.cab.solida::before{opacity:0}
 .cab__barra{
   display:flex;align-items:center;justify-content:space-between;gap:var(--sp5);
   width:100%;max-width:var(--larg);margin-inline:auto;
@@ -149,8 +157,14 @@ figure{margin:0}
 .menu-mob__cta{justify-content:center;border-bottom:0;margin-top:var(--sp5);color:var(--preto)}
 @keyframes descer{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
 
-/* ---------- CAPA (diptico) ---------- */
+/* ---------- CAPA (diptico) ----------
+   Dois estados no mesmo HTML:
+   - base: o diptico estatico de sempre (e o que aparece sem JS)
+   - .capa--cortina: o JS liga, a secao fica alta e o miolo gruda na tela;
+     ai os dois lados abrem e revelam o poster de casamentos atras.        */
 .capa{padding:104px var(--sp5) var(--sp7)}
+.capa__fixo{display:block}
+
 .capa__titulo{max-width:var(--larg);margin:0 auto var(--sp6);text-align:center}
 .capa__marca{
   display:block;font-family:var(--ff-tit);
@@ -198,6 +212,77 @@ figure{margin:0}
   font-size:.85rem;color:var(--creme-3);text-align:center;
 }
 .capa__selo strong{color:var(--creme);font-weight:500}
+
+/* o poster revelado e a ponte so existem no modo cortina */
+.revelo,.capa__ponte{display:none}
+
+/* ===================== MODO CORTINA ===================== */
+.capa--cortina{height:230vh;padding:0}
+.capa--cortina .capa__fixo{
+  position:sticky;top:0;
+  height:100vh;overflow:hidden;
+  display:grid;grid-template-areas:"palco";place-items:center;
+}
+.capa--cortina .capa__fixo > *{grid-area:palco}
+
+/* poster de casamentos, atras das cortinas */
+.capa--cortina .revelo{
+  display:block;margin:0;
+  opacity:0;transform:scale(.88);
+  will-change:opacity,transform;
+  z-index:0;
+}
+.capa--cortina .revelo img{
+  max-height:64vh;width:auto;
+  max-width:calc(100vw - 3rem);   /* no celular encostava nas duas bordas */
+  border-radius:var(--raio);
+  box-shadow:0 30px 90px rgba(0,0,0,.75);
+}
+
+/* cada lado vira metade da tela, de alto a baixo */
+.capa--cortina .dip{
+  display:block;position:absolute;inset:0;max-width:none;margin:0;z-index:2;
+}
+.capa--cortina .dip__lado{
+  position:absolute;top:0;bottom:0;width:50.4%;
+  aspect-ratio:auto;border:0;border-radius:0;
+  will-change:transform;
+}
+.capa--cortina .dip__lado:first-child{left:0}
+.capa--cortina .dip__lado:last-child{right:0}
+.capa--cortina .dip__veu{
+  background:linear-gradient(to top,rgba(11,10,9,.94) 6%,rgba(11,10,9,.5) 40%,rgba(11,10,9,.18) 70%,rgba(11,10,9,.42) 100%);
+}
+.capa--cortina .dip__txt{padding:var(--sp5) var(--sp4) var(--sp7)}
+.capa--cortina .dip__tit{font-size:clamp(1.15rem,3.6vw,2rem)}
+
+.capa--cortina .capa__titulo{
+  position:relative;z-index:4;margin:0;padding-inline:var(--sp5);
+  will-change:opacity;pointer-events:none;
+  text-shadow:0 2px 30px rgba(11,10,9,.75);
+}
+.capa--cortina .capa__selo{border-top:0;margin-top:var(--sp5);padding-top:0}
+
+.capa--cortina .capa__ponte{
+  display:block;position:relative;z-index:1;
+  align-self:end;justify-self:center;
+  /* no celular o botao flutuante do WhatsApp fica no mesmo canto:
+     a margem maior tira a ponte de baixo dele */
+  margin:0 0 5.5rem;opacity:0;
+  will-change:opacity;
+}
+@media (min-width:480px){
+  .capa--cortina .capa__ponte{margin-bottom:var(--sp6)}
+}
+.capa--cortina .capa__ponte a{
+  display:inline-flex;align-items:center;gap:.5rem;min-height:44px;
+  padding:.55rem 1.3rem;border:1px solid var(--linha);border-radius:999px;
+  background:rgba(11,10,9,.72);backdrop-filter:blur(8px);
+  font-size:.85rem;letter-spacing:.04em;color:var(--ouro-claro);
+  transition:border-color var(--tr),background-color var(--tr);
+}
+.capa--cortina .capa__ponte a:hover{border-color:var(--ouro);background:rgba(11,10,9,.9)}
+.capa--cortina .capa__ponte[data-off="1"]{pointer-events:none}
 
 /* ---------- BLOCOS ---------- */
 .bloco{padding:var(--sp8) var(--sp5);max-width:var(--larg);margin-inline:auto}
@@ -443,8 +528,8 @@ figure{margin:0}
 }
 
 @media (min-width:700px){
-  .dip{grid-template-columns:1fr 1fr}
-  .dip__lado{aspect-ratio:3/4}
+  .capa:not(.capa--cortina) .dip{grid-template-columns:1fr 1fr}
+  .capa:not(.capa--cortina) .dip__lado{aspect-ratio:3/4}
   .galeria{column-count:2}
   .corp{grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:var(--sp7);align-items:center}
   .virada{grid-template-columns:1fr 1fr;gap:var(--sp5)}
@@ -459,7 +544,7 @@ figure{margin:0}
   .cab__nav{display:inline-flex}
   .hamb,.menu-mob{display:none}
 
-  .capa{padding:150px var(--sp6) var(--sp8)}
+  .capa:not(.capa--cortina){padding:150px var(--sp6) var(--sp8)}
   .bloco{padding:var(--sp9) var(--sp6)}
   .galeria{column-count:3;column-gap:var(--sp4)}
 
